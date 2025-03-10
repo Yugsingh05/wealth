@@ -29,6 +29,8 @@ const HeroSection = () => {
 
         return () => window.removeEventListener("scroll", handleScroll);
     },[])
+
+    
   return (
     <div className="pb-20 px-4">
       <div className="container mx-auto text-center">

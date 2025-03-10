@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+} 
+
+enum AccountType {
+  SAVINGS
+  CURRENT
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum TransactionStatus {
+  COMPLETED
+  PENDING
+  CANCELLED
+}
+
+enum RecurringInterval {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+
+model User {
+  id String @id @default(uuid())
+  clerkUserId String @unique
+  email String @unique
+  name String?                
+  imageUrl String?
+  transactions Transaction[]
+  accounts Account[]
+  budgets Budget[]
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+
+model Account {
+
+  id String @id @default(uuid())
+  name String
+  type AccountType
+  balance Decimal @default(0)
+  isDefault Boolean @default(false)
+  userId String
+  user User @relation(fields: [userId], references: [id] ,onDelete: Cascade)
+  transactions Transaction[]
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@map("accounts")
+
+}
+
+
+model Transaction {
+  id  String @id @default(uuid())
+  type TransactionType
+  amount Decimal
+  description String?
+  date DateTime
+  category String
+  receiptUrl String?
+  isRecurring Boolean @default(false)
+  recurringInterval RecurringInterval?
+  nextTransactionDate DateTime?
+  lastProcessed DateTime?
+  status TransactionStatus @default(COMPLETED)
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId String
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@map("transactions")
+}
+
+model Budget {
+  id String @id @default(uuid())
+  amount Decimal
+  lastAlertSent DateTime?
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@index([userId])
+
+  @@map("budgets")
+}
+
+
