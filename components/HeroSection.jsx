@@ -42,12 +42,13 @@ const HeroSection = () => {
           analyze , and optimize your spending with real-time insights.
         </p>
         <div className="flex  justify-center space-x-4">
-          <Link href={"/register"}>
-            <Button>Get Started</Button>
+          <Link href={"/dashboard"}>
+            <Button className={"hover:cursor-pointer"}>Get Started</Button>
           </Link>
-          <Link href={"/login"}>
+          
+          {/* <Link href={"/sign-up"}>
             <Button variant={"outline"}>Login</Button>
-          </Link>
+          </Link> */}
         </div>
         <div className="hero-image-wrapper">
           <div ref={imageRef} className="hero-image">

@@ -25,7 +25,7 @@ const NotFound = () => {
         transition={{ duration: 0.7, delay: 0.3 }}
         className="mt-8"
       >
-        <Link href="/">
+        <Link href="/dashboard">
           <Button className="bg-yellow-400 text-black hover:bg-yellow-500 py-2 px-6 text-lg rounded-full shadow-lg hover:cursor-pointer">
             Return to Dashboard
           </Button>
