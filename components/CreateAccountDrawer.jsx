@@ -27,6 +27,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 const CreateAccountDrawer = ({ children }) => {
+  
   const validationSchema = Yup.object({
     name: Yup.string().min(1, "Name is required").required("Name is required"),
     type: Yup.string().required("Account type is required"),
