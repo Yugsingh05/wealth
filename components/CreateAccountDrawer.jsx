@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -21,14 +21,43 @@ import {
 } from "./ui/select";
 import { Switch } from "./ui/switch";
 import { Button } from "./ui/button";
+import UseFetch from "@/hooks/use-fetcch";
+import { CreateAccount } from "@/actions/dashboard";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const CreateAccountDrawer = ({ children }) => {
   const validationSchema = Yup.object({
     name: Yup.string().min(1, "Name is required").required("Name is required"),
     type: Yup.string().required("Account type is required"),
-    balance: Yup.string().min(1, "Initial balance is required").required("Initial balance is required"),
+    balance: Yup.string()
+      .min(1, "Initial balance is required")
+      .required("Initial balance is required"),
     isDefault: Yup.boolean().default(false),
   });
+
+  const [open, setOpen] = useState(false);
+
+  const {
+    data: NewAccount,
+    error,
+    fn: createAccountFn,
+    loading: createAccountLoading,
+  } = UseFetch(CreateAccount);
+
+  useEffect(() => {
+    if (NewAccount && !createAccountLoading) {
+      toast.success("Account created successfully");
+      formik.resetForm();
+      setOpen(false);
+    }
+  }, [NewAccount, createAccountLoading]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message || "Failed to create account");
+    }
+  }, [error]);
 
   const formik = useFormik({
     initialValues: {
@@ -37,13 +66,15 @@ const CreateAccountDrawer = ({ children }) => {
       balance: "",
       isDefault: false,
     },
-    validationSchema,  // ✅ Corrected this
-    onSubmit: (values) => {
+    validationSchema, // ✅ Corrected this
+
+    onSubmit: async (values) => {
       console.log("values", values);
+
+      const res = await createAccountFn(values);
+      console.log("res", res);
     },
   });
-
-  const [open, setOpen] = useState(false);
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
@@ -129,32 +160,36 @@ const CreateAccountDrawer = ({ children }) => {
                 id="isDefault"
                 name="isDefault"
                 checked={formik.values.isDefault}
-                onCheckedChange={(e) =>
-                  formik.setFieldValue("isDefault", e)
-                } // ✅ Fixed Switch handling
+                onCheckedChange={(e) => formik.setFieldValue("isDefault", e)} // ✅ Fixed Switch handling
               />
 
               {formik.errors.isDefault && formik.touched.isDefault && (
-                <p className="text-red-600 text-sm">{formik.errors.isDefault}</p>
+                <p className="text-red-600 text-sm">
+                  {formik.errors.isDefault}
+                </p>
               )}
             </div>
 
-            <div className="flex gap-4 pt-4">
+            <div className="flex gap-4 pt-4 justify-center items-center ">
               <DrawerClose asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="flex-1"
-                >
+                <Button type="button" variant="outline" className="flex-1 cursor-pointer max-w-[200px]">
                   Cancel
                 </Button>
               </DrawerClose>
 
               <Button
-                className="cursor-pointer flex-1"
+                disabled={createAccountLoading}
+                className="cursor-pointer flex-1 max-w-[200px]"
                 type="submit" // ✅ Corrected submit handling
               >
-                Create Account
+                {createAccountLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+                    Creating...{" "}
+                  </>
+                ) : (
+                  "Create Account"
+                )}
               </Button>
             </div>
           </form>

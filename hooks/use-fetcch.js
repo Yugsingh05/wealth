@@ -1,0 +1,36 @@
+const { useState } = require("react");
+const { toast } = require("sonner");
+
+const UseFetch = (cb) => {
+    const [data, setData] = useState(undefined);
+    const  [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fn = async (...args) => {
+        setLoading(true);
+        setError(null);
+
+        try {
+
+            const response = await cb(...args);
+            console.log("response", response);
+            setData(response);
+            setLoading(false);
+            
+        } catch (error) {
+            setError(error);
+            toast.error(error.message);
+            
+        }
+        finally{
+            setLoading(false)
+        }
+    }
+
+    return {fn, data, loading, error,setData};
+   
+    
+    
+}
+
+export default UseFetch
