@@ -2,11 +2,14 @@
 import { GetAccountWithTransactions } from '@/actions/accounts'
 import TransactionTable from '@/components/TransactionTable';
 import { notFound } from 'next/navigation';
-import React, { Suspense } from 'react'
+import React, { Suspense} from 'react'
 
 const Account = async ({params}) => {
 
   const {id} = await params;
+// const [open, setOpen] = useState(false);
+// const [transactionToDelete, setTransactionToDelete] = useState(null);
+// const [deletefn, setDeleteFn] = useState(null);
 
   const accountData = await GetAccountWithTransactions(id);
 
@@ -44,6 +47,7 @@ const Account = async ({params}) => {
       <TransactionTable transactions={transactions}/>
     </Suspense>
     
+    {/* <DeleteDialo open={open} setOpen={setOpen} transaction={transactionToDelete} deleteFn={deletefn}/> */}
     
     </div>
   )

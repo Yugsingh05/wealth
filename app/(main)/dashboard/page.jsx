@@ -8,9 +8,8 @@ import React from "react";
 const DashBoardPage = async() => {
 
   const accounts = await GetUserAccounts();
-  console.log("accounts", accounts);
   return (
-    <div className="px-5">
+    <div className="px-5" >
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <CreateAccountDrawer>
           <Card className="hover:shadow-md transition-shadow cursor-pointer border-dashed">

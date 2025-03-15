@@ -13,7 +13,6 @@ const UseFetch = (cb) => {
         try {
 
             const response = await cb(...args);
-            console.log("response", response);
             setData(response);
             setLoading(false);
             
