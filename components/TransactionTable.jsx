@@ -143,6 +143,7 @@ const TransactionTable = ({ transactions }) => {
     loading: deleteLoading,
     fn: deleteFn,
     data: deleted,
+    error: deleteError
   } = UseFetch(bulkDeleteTransactions);
 
   const handleBulkDelete = async () => {
@@ -158,10 +159,20 @@ const TransactionTable = ({ transactions }) => {
 
   useEffect(() => {
     if (deleted && !deleteLoading) {
-      setSelectedIds([]);
-      toast.success("Transactions deleted successfully",{
-        position:"top-right"
-      });
+      console.log("deleted", deleted);
+     
+      if(deleted.success ) {
+        setSelectedIds([]);
+        toast.success("Transactions deleted successfully",{
+          position:"top-right"
+        })
+      }
+      else {
+        toast.error("Error deleting transactions",{
+          position:"top-left"
+        });
+
+      }
     }
   }, [deleted, deleteLoading]);
 
@@ -177,6 +188,10 @@ const TransactionTable = ({ transactions }) => {
     setOpen(true);
 
   }
+
+  useEffect(() => {
+    console.log(selectedIds)
+  }, [selectedIds])
 
 
   return (
