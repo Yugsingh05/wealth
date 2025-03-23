@@ -231,7 +231,7 @@ export async function getUserTransactions(query = {}) {
 }
 
 
-function calculateNextRecurringDate(startDate, interval) {
+ async function calculateNextRecurringDate(startDate, interval) {
   const date = new Date(startDate);
 
   switch (interval) {
