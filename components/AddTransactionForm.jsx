@@ -81,6 +81,7 @@ const AddTransactionForm = ({
             router.push(`/account/${res.data.accountId}`);
           }
         } catch (error) {
+          toast.error(error.message);
           console.error("error", error);
         } finally {
           setTransactionLoading(false);
@@ -99,6 +100,7 @@ const AddTransactionForm = ({
             router.push(`/account/${res.data.accountId}`);
           }
         } catch (error) {
+          toast.error(error.message);
           console.error("error", error);
         } finally {
           setTransactionLoading(false);
