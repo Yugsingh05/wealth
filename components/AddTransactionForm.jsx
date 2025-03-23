@@ -1,10 +1,9 @@
 "use client";
 
 import { transactionSchema } from "@/app/lib/schema";
-import UseFetch from "@/hooks/use-fetcch";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -35,12 +34,6 @@ const AddTransactionForm = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams?.get("edit");
-  // const {values} = useFormikContext();
-  // const {
-    
-  //   fn: transactionFn,
-  // } = UseFetch(editMode ? updateTransaction : CreateTransaction);
-
 
   const formik = useFormik({
     initialValues:
@@ -66,41 +59,37 @@ const AddTransactionForm = ({
             isRecurring: false,
           },
     validationSchema: transactionSchema,
-    onSubmit: async(data) => {
+    onSubmit: async (data) => {
       console.log("data", data);
       setTransactionLoading(true);
       const formData = {
-          ...data,
-          amount: parseFloat(data.amount),
-        };
+        ...data,
+        amount: parseFloat(data.amount),
+      };
 
-        if (editMode) {
+      if (editMode) {
         try {
           const res = await updateTransaction(editId, formData);
           console.log("res", res);
-          if(res.success){
+          if (res.success) {
             toast.success(
               editMode
                 ? "Transaction updated successfully"
                 : "Transaction created successfully"
             );
-          
+
             router.push(`/account/${res.data.accountId}`);
           }
         } catch (error) {
           console.error("error", error);
-          
-        }
-        finally{
+        } finally {
           setTransactionLoading(false);
         }
-        } 
-
-        else {
-         try {
+      } else {
+        try {
           const res = await CreateTransaction(formData);
           console.log("res", res);
-          if(res.success){
+          if (res.success) {
             toast.success(
               editMode
                 ? "Transaction updated successfully"
@@ -109,18 +98,14 @@ const AddTransactionForm = ({
             formik.handleReset();
             router.push(`/account/${res.data.accountId}`);
           }
-         } catch (error) {
+        } catch (error) {
           console.error("error", error);
-          
-         }
-         finally{
+        } finally {
           setTransactionLoading(false);
         }
-    }
+      }
     },
   });
-
-  
 
   // useEffect(() => {
   //   if (transactionResult?.success && !transactionLoading) {
@@ -292,10 +277,12 @@ const AddTransactionForm = ({
           </div>
         </div>
         <Switch
-        id="isRecurring"
-        name="isRecurring"
+          id="isRecurring"
+          name="isRecurring"
           checked={formik.values.isRecurring}
-          onCheckedChange={(checked) => formik.setFieldValue("isRecurring", checked)}
+          onCheckedChange={(checked) =>
+            formik.setFieldValue("isRecurring", checked)
+          }
         />
       </div>
 
@@ -303,7 +290,9 @@ const AddTransactionForm = ({
         <div className="space-y-2">
           <label className="text-sm font-medium">Recurring Interval</label>
           <Select
-            onValueChange={(value) => formik.setFieldValue("recurringInterval", value)}
+            onValueChange={(value) =>
+              formik.setFieldValue("recurringInterval", value)
+            }
             defaultValue={formik.values.recurringInterval}
           >
             <SelectTrigger>
@@ -323,7 +312,6 @@ const AddTransactionForm = ({
           )}
         </div>
       )}
-
 
       <div className="flex gap-4 flex-col">
         <Button
