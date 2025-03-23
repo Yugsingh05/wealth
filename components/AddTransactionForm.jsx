@@ -131,7 +131,7 @@ const AddTransactionForm = ({
   return (
     <form className="space-y-6">
       {/* {!editMode && <ReceiptScanner onScanComplete={handleScanComplete} />} */}
-      <ReceiptScanner onScanComplete={handleScanComplete}/>
+     { !editMode && <ReceiptScanner onScanComplete={handleScanComplete}/>}
 
 
 
