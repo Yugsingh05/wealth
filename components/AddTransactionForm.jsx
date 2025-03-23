@@ -109,18 +109,6 @@ const AddTransactionForm = ({
     },
   });
 
-  // useEffect(() => {
-  //   if (transactionResult?.success && !transactionLoading) {
-  //     toast.success(
-  //       editMode
-  //         ? "Transaction updated successfully"
-  //         : "Transaction created successfully"
-  //     );
-  //     reset();
-  //     router.push(`/account/${transactionResult.data.accountId}`);
-  //   }
-  // }, [transactionResult, transactionLoading, editMode]);
-
   const filteredCategories = categories.filter(
     (category) => category.type === formik.values.type
   );
@@ -132,10 +120,11 @@ const AddTransactionForm = ({
       <div className="space-y-2">
         <label className="text-sm font-medium">Type</label>
         <Select
+        
           onValueChange={(value) => formik.setFieldValue("type", value)}
           defaultValue={formik.values.type}
         >
-          <SelectTrigger>
+          <SelectTrigger className={"w-full"}>
             <SelectValue placeholder="Select type" />
           </SelectTrigger>
           <SelectContent>
@@ -169,7 +158,7 @@ const AddTransactionForm = ({
             onValueChange={(value) => formik.setFieldValue("accountId", value)}
             defaultValue={formik.values.accountId}
           >
-            <SelectTrigger>
+            <SelectTrigger className={"w-full"}>
               <SelectValue placeholder="Select account" />
             </SelectTrigger>
             <SelectContent>
@@ -202,7 +191,7 @@ const AddTransactionForm = ({
           onValueChange={(value) => formik.setFieldValue("category", value)}
           defaultValue={formik.values.category}
         >
-          <SelectTrigger>
+          <SelectTrigger className={"w-full"}>
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
           <SelectContent>
