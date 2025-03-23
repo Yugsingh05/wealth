@@ -22,6 +22,7 @@ import { CreateTransaction, updateTransaction } from "@/actions/transaction";
 import { Calendar } from "./ui/calendar";
 import { Switch } from "./ui/switch";
 import { toast } from "sonner";
+import ReceiptScanner from "./ReceiptScanner";
 
 const AddTransactionForm = ({
   accounts,
@@ -112,9 +113,27 @@ const AddTransactionForm = ({
   const filteredCategories = categories.filter(
     (category) => category.type === formik.values.type
   );
+
+  const handleScanComplete = (scannedData) => {
+    if (scannedData) {
+      console.log("scannedData", scannedData);
+      formik.setFieldValue("amount", scannedData.amount.toString());
+      formik.setFieldValue("date", new Date(scannedData.date));
+      if (scannedData.description) {
+        formik.setFieldValue("description", scannedData.description);
+      }
+      if (scannedData.category) {
+        formik.setFieldValue("category", scannedData.category);
+      }
+      toast.success("Receipt scanned successfully");
+    }
+  };
   return (
     <form className="space-y-6">
       {/* {!editMode && <ReceiptScanner onScanComplete={handleScanComplete} />} */}
+      <ReceiptScanner onScanComplete={handleScanComplete}/>
+
+
 
       {/* Type */}
       <div className="space-y-2">
@@ -188,6 +207,7 @@ const AddTransactionForm = ({
       <div className="space-y-2">
         <label className="text-sm font-medium">Category</label>
         <Select
+        value={formik.values.category}
           onValueChange={(value) => formik.setFieldValue("category", value)}
           defaultValue={formik.values.category}
         >
