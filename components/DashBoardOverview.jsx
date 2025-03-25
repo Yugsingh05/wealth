@@ -31,7 +31,7 @@ const COLORS = [
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
-                    label={({ name, value }) => `${name}: $${value}`}
+                    label={({ name, value }) => `${name}: ₹${value}`}
                   >
                     {pieChartData.map((entry, index) => (
                       <Cell
@@ -41,7 +41,7 @@ const COLORS = [
                     ))}
                   </Pie>
                   <Tooltip
-                    formatter={(value) => `$${value}`}
+                    formatter={(value) => `₹${value}`}
                     contentStyle={{
                       backgroundColor: "hsl(var(--popover))",
                       border: "1px solid hsl(var(--border))",
@@ -55,7 +55,7 @@ const COLORS = [
     );
   }
 
-  
+
 const DashBoardOverview = ({accounts,transactions}) => {
 
     console.log("accounts",accounts);
