@@ -47,81 +47,96 @@ import {
   
   export default function EmailTemplate({
     userName =  "Yug singh",
-    type = "budget-alert",
+    type = "monthly-report",
     data = {
-      percentageUsed: 86,
-      budgetAmount: 10000,
-      totalExpenses: 8600,
+      month: "December",
+      stats: {
+        totalIncome: 5000,
+        totalExpenses: 3500,
+        byCategory: {
+          housing: 1500,
+          groceries: 600,
+          transportation: 400,
+          entertainment: 300,
+          utilities: 700,
+        },
+      },
+      insights: [
+        "Your housing expenses are 43% of your total spending - consider reviewing your housing costs.",
+        "Great job keeping entertainment expenses under control this month!",
+        "Setting up automatic savings could help you save 20% more of your income.",
+      ],
     },
   }) {
-    // if (type === "monthly-report") {
-    //   return (
-    //     <Html>
-    //       <Head />
-    //       <Preview>Your Monthly Financial Report</Preview>
-    //       <Body style={styles.body}>
-    //         <Container style={styles.container}>
-    //           <Heading style={styles.title}>Monthly Financial Report</Heading>
-  
-    //           <Text style={styles.text}>Hello {userName},</Text>
-    //           <Text style={styles.text}>
-    //             Here&rsquo;s your financial summary for {data?.month}:
-    //           </Text>
-  
-    //           {/* Main Stats */}
-    //           <Section style={styles.statsContainer}>
-    //             <div style={styles.stat}>
-    //               <Text style={styles.text}>Total Income</Text>
-    //               <Text style={styles.heading}>${data?.stats.totalIncome}</Text>
-    //             </div>
-    //             <div style={styles.stat}>
-    //               <Text style={styles.text}>Total Expenses</Text>
-    //               <Text style={styles.heading}>${data?.stats.totalExpenses}</Text>
-    //             </div>
-    //             <div style={styles.stat}>
-    //               <Text style={styles.text}>Net</Text>
-    //               <Text style={styles.heading}>
-    //                 ${data?.stats.totalIncome - data?.stats.totalExpenses}
-    //               </Text>
-    //             </div>
-    //           </Section>
-  
-    //           {/* Category Breakdown */}
-    //           {data?.stats?.byCategory && (
-    //             <Section style={styles.section}>
-    //               <Heading style={styles.heading}>Expenses by Category</Heading>
-    //               {Object.entries(data?.stats.byCategory).map(
-    //                 ([category, amount]) => (
-    //                   <div key={category} style={styles.row}>
-    //                     <Text style={styles.text}>{category}</Text>
-    //                     <Text style={styles.text}>${amount}</Text>
-    //                   </div>
-    //                 )
-    //               )}
-    //             </Section>
-    //           )}
-  
-    //           {/* AI Insights */}
-    //           {data?.insights && (
-    //             <Section style={styles.section}>
-    //               <Heading style={styles.heading}>Welth Insights</Heading>
-    //               {data.insights.map((insight, index) => (
-    //                 <Text key={index} style={styles.text}>
-    //                   • {insight}
-    //                 </Text>
-    //               ))}
-    //             </Section>
-    //           )}
-  
-    //           <Text style={styles.footer}>
-    //             Thank you for using Welth. Keep tracking your finances for better
-    //             financial health!
-    //           </Text>
-    //         </Container>
-    //       </Body>
-    //     </Html>
-    //   );
-    // }
+    if (type === "monthly-report") {
+      return (
+<Html>
+  <Head />
+  <Preview>Your Monthly Financial Report - Stay Informed, Stay Empowered</Preview>
+  <Body style={styles.body}>
+    <Container style={styles.container}>
+      <Heading style={styles.title}>📊 Monthly Financial Report</Heading>
+
+      <Text style={styles.greeting}>Dear {userName},</Text>
+      <Text style={styles.text}>
+        We hope this message finds you well. Here is your financial overview for <b>{data?.month}</b>:
+      </Text>
+
+      {/* Main Stats */}
+      <Section style={statsStyles.statsContainer}>
+        <div style={statsStyles.statCard}>
+          <Text style={statsStyles.statTitle}>💰 Total Income</Text>
+          <Text style={statsStyles.statAmount}>₹{data?.stats.totalIncome}</Text>
+        </div>
+        <div style={statsStyles.statCard}>
+          <Text style={statsStyles.statTitle}>📉 Total Expenses</Text>
+          <Text style={statsStyles.statAmount}>₹{data?.stats.totalExpenses}</Text>
+        </div>
+        <div style={statsStyles.statCard}>
+          <Text style={statsStyles.statTitle}>📈 Net Balance</Text>
+          <Text style={statsStyles.statAmount}>
+            ₹{data?.stats.totalIncome - data?.stats.totalExpenses}
+          </Text>
+        </div>
+      </Section>
+
+      {/* Category Breakdown */}
+      {data?.stats?.byCategory && (
+        <Section style={styles.section}>
+          <Heading style={styles.subHeading}>💸 Expenses by Category</Heading>
+          {Object.entries(data?.stats.byCategory).map(
+            ([category, amount]) => (
+              <div key={category} style={styles.row}>
+                <Text style={styles.category}>{category}</Text>
+                <Text style={styles.amount}>₹{amount}</Text>
+              </div>
+            )
+          )}
+        </Section>
+      )}
+
+      {/* AI Insights */}
+      {data?.insights && (
+        <Section style={styles.section}>
+          <Heading style={styles.subHeading}>🔍 Wealth Insights</Heading>
+          {data.insights.map((insight, index) => (
+            <Text key={index} style={styles.insight}>
+              ➤ {insight}
+            </Text>
+          ))}
+        </Section>
+      )}
+
+      <Text style={styles.footer}>
+        <b>Thank you for choosing Welth.</b> We're committed to helping you achieve your financial goals. Continue tracking your finances to make informed decisions for a brighter future.
+      </Text>
+    </Container>
+  </Body>
+</Html>
+
+
+      );
+    }
   
     if (type === "budget-alert") {
       return (
@@ -239,6 +254,35 @@ import {
       marginTop: "24px",
       paddingTop: "16px",
       borderTop: "1px solid #e5e7eb",
+    },
+  };
+  
+
+  const statsStyles = {
+    statsContainer: {
+      backgroundColor: "#f9fafb",
+      borderRadius: "12px",
+      padding: "24px",
+      marginTop: "24px",
+    },
+    statCard: {
+      backgroundColor: "#ffffff",
+      padding: "20px",
+      borderRadius: "12px",
+      textAlign: "center",
+      boxShadow: "0 3px 8px rgba(0, 0, 0, 0.05)",
+      border: "1px solid #e5e7eb",
+      marginBottom: "12px",
+    },
+    statTitle: {
+      color: "#6b7280",
+      fontSize: "14px",
+      marginBottom: "4px",
+    },
+    statAmount: {
+      color: "#1f2937",
+      fontSize: "20px",
+      fontWeight: "700",
     },
   };
   
