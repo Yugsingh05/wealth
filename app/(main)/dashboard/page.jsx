@@ -1,10 +1,11 @@
 "use server"
 
 import { getCurrentBudget } from "@/actions/budget";
-import { GetUserAccounts } from "@/actions/dashboard";
+import { getDashboardData, GetUserAccounts } from "@/actions/dashboard";
 import AccountCard from "@/components/AccountCard";
 import BudgetProcess from "@/components/BudgetProcess";
 import CreateAccountDrawer from "@/components/CreateAccountDrawer";
+import DashBoardOverview from "@/components/DashBoardOverview";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 import React from "react";
@@ -19,10 +20,17 @@ const DashBoardPage = async() => {
     budgetData = await getCurrentBudget(defaultAccount.id)
   }
 
+  const transactions = await getDashboardData()
+
   return (
     <div className="space-y-8" >
 
       <BudgetProcess initialBudget = {budgetData?.budget} currentExpenses={budgetData?.currentExpenses || 0}/>
+
+      <DashBoardOverview
+        accounts={accounts}
+        transactions={transactions || []}
+      />
 
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
