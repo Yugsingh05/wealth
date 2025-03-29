@@ -8,7 +8,9 @@ import { Switch } from './ui/switch';
 import { ArrowDownRight, ArrowUpRight, Loader2 } from 'lucide-react';
 import { UpdateDefaultAccount } from '@/actions/accounts';
 import { toast } from 'sonner';
-import { Dialog, DialogContent } from './ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from './ui/dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+
 
 const AccountCard = ({account}) => {
 
@@ -32,13 +34,17 @@ const AccountCard = ({account}) => {
 
         useEffect(() => {
             if (updatedAccount?.success) {
-              toast.success("Default account updated successfully");
+              toast.success("Default account updated successfully",{
+                position:"top-right"
+              });
             }
           }, [updatedAccount]);
         
           useEffect(() => {
             if (error) {
-              toast.error(error.message || "Failed to update default account");
+              toast.error(error.message || "Failed to update default account" , {
+                position:"top-right"
+              });
             }
           }, [error]);
   return (
@@ -49,12 +55,14 @@ const AccountCard = ({account}) => {
             <CardTitle className={"text-sm font-medium capitalize"}>
                 {name}
             </CardTitle>
+          
             <Switch
             className={"cursor-pointer"}
             checked={isDefault}
             onClick={handleDefaultChange}
             disabled = {updateDefaultLoading}
             />
+        
         </CardHeader>
 
         <CardContent>
@@ -85,11 +93,15 @@ const AccountCard = ({account}) => {
     </Card>
 
     <Dialog open={updateDefaultLoading}>
-                <DialogContent className="flex flex-col items-center gap-4">
-                    <Loader2 className='animate-spin h-8 w-8 text-blue-500' />
-                    <p className='text-sm text-muted-foreground'>Updating default account...</p>
-                </DialogContent>
-            </Dialog>
+    <DialogContent className="flex flex-col items-center gap-4">
+        <DialogTitle>
+            <VisuallyHidden>Updating Account</VisuallyHidden>
+        </DialogTitle>
+
+        <Loader2 className='animate-spin h-8 w-8 text-blue-500' />
+        <p className='text-sm text-muted-foreground'>Updating default account...</p>
+    </DialogContent>
+</Dialog>
 
 
 

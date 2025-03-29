@@ -90,7 +90,7 @@ const AddTransactionForm = ({
       } else {
         try {
           const res = await CreateTransaction(formData);
-          console.log("res", res);
+         
           if (res.success) {
             toast.success(
               editMode

@@ -13,7 +13,7 @@ export const ThemeChanger = () => {
       <DropdownMenuTrigger asChild>
         <Button className="flex items-center gap-2 hover:cursor-pointer hover:dark:bg-blue-600 hover:dark:text-white hover:bg-white hover:text-black border-2">
          {theme !== "dark" && theme !== "system" ? <Sun size={18} /> : theme === "dark" ? <Moon size={18} /> : <Monitor size={18} />} 
-         <span className='hidden md:inline'>{theme.toUpperCase()}</span>
+         <span className='hidden md:inline'>{theme && theme.toUpperCase()}</span>
         </Button>
       </DropdownMenuTrigger>
 

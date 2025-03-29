@@ -66,7 +66,6 @@ export async function CreateTransaction(data) {
     const balanceChange = data.type === "EXPENSE" ? -data.amount : data.amount;
     const newBalance = Number(account.balance) + balanceChange;
 
-    console.log("balanceChange", typeof balanceChange, "newBalance", typeof newBalance);
 
     const transaction = await db.$transaction(async (tx) => {
       const newTransaction = await tx.transaction.create({
@@ -247,7 +246,6 @@ export async function getUserTransactions(query = {}) {
       date.setFullYear(date.getFullYear() + 1);
       break;
   }
-console.log("date " , date)
   return date;
 }
 
