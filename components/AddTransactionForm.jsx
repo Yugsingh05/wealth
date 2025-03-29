@@ -143,12 +143,12 @@ const AddTransactionForm = ({
           onValueChange={(value) => formik.setFieldValue("type", value)}
           defaultValue={formik.values.type}
         >
-          <SelectTrigger className={"w-full"}>
+          <SelectTrigger className={"w-full cursor-pointer"}>
             <SelectValue placeholder="Select type" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="EXPENSE">Expense</SelectItem>
-            <SelectItem value="INCOME">Income</SelectItem>
+            <SelectItem value="EXPENSE" className={"cursor-pointer"}>Expense</SelectItem>
+            <SelectItem value="INCOME" className={"cursor-pointer"}>Income</SelectItem>
           </SelectContent>
         </Select>
         {formik.errors.type && (
@@ -163,6 +163,7 @@ const AddTransactionForm = ({
           <Input
             type="number"
             step="0.01"
+            className="cursor-pointer"
             placeholder="0.00"
             {...formik.getFieldProps("amount")}
           />
@@ -177,12 +178,12 @@ const AddTransactionForm = ({
             onValueChange={(value) => formik.setFieldValue("accountId", value)}
             defaultValue={formik.values.accountId}
           >
-            <SelectTrigger className={"w-full"}>
+            <SelectTrigger className={"w-full cursor-pointer"}>
               <SelectValue placeholder="Select account" />
             </SelectTrigger>
             <SelectContent>
               {accounts.data.map((account) => (
-                <SelectItem key={account.id} value={account.id}>
+                <SelectItem key={account.id} value={account.id} className={"cursor-pointer"}>
                   {account.name} (${parseFloat(account.balance).toFixed(2)})
                 </SelectItem>
               ))}
@@ -190,7 +191,7 @@ const AddTransactionForm = ({
                 <Button
                   type="button"
                   variant="ghost"
-                  className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
+                  className="relative  cursor-pointer flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
                 >
                   Create Account
                 </Button>
@@ -211,12 +212,12 @@ const AddTransactionForm = ({
           onValueChange={(value) => formik.setFieldValue("category", value)}
           defaultValue={formik.values.category}
         >
-          <SelectTrigger className={"w-full"}>
+          <SelectTrigger className={"w-full cursor-pointer"}>
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
           <SelectContent>
             {filteredCategories.map((category) => (
-              <SelectItem key={category.id} value={category.id}>
+              <SelectItem key={category.id} value={category.id} className={"cursor-pointer"}>
                 {category.name}
               </SelectItem>
             ))}
@@ -236,7 +237,7 @@ const AddTransactionForm = ({
               type="button"
               variant="outline"
               className={cn(
-                "w-full pl-3 text-left font-normal",
+                "w-full pl-3 text-left font-normal cursor-pointer",
                 !formik.values.date && "text-muted-foreground"
               )}
             >
@@ -272,6 +273,7 @@ const AddTransactionForm = ({
           placeholder="Enter description"
           id="description"
           name="description"
+          className={"cursor-pointer"}
           {...formik.getFieldProps("description")}
         />
         {formik.errors.description && (
@@ -291,6 +293,7 @@ const AddTransactionForm = ({
           id="isRecurring"
           name="isRecurring"
           checked={formik.values.isRecurring}
+          className={"cursor-pointer"}
           onCheckedChange={(checked) =>
             formik.setFieldValue("isRecurring", checked)
           }
@@ -306,14 +309,14 @@ const AddTransactionForm = ({
             }
             defaultValue={formik.values.recurringInterval}
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Select interval" />
+            <SelectTrigger className={"cursor-pointer"}>
+              <SelectValue placeholder="Select interval"  />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="DAILY">Daily</SelectItem>
-              <SelectItem value="WEEKLY">Weekly</SelectItem>
-              <SelectItem value="MONTHLY">Monthly</SelectItem>
-              <SelectItem value="YEARLY">Yearly</SelectItem>
+              <SelectItem value="DAILY" className={"cursor-pointer"}>Daily</SelectItem>
+              <SelectItem value="WEEKLY" className={"cursor-pointer"}>Weekly</SelectItem>
+              <SelectItem value="MONTHLY" className={"cursor-pointer"}>Monthly</SelectItem>
+              <SelectItem value="YEARLY" className={"cursor-pointer"}>Yearly</SelectItem>
             </SelectContent>
           </Select>
           {formik.errors.recurringInterval && (
@@ -328,7 +331,7 @@ const AddTransactionForm = ({
         <Button
           type="button"
           variant="outline"
-          className="w-full"
+          className="w-full cursor-pointer"
           onClick={() => router.back()}
         >
           Cancel
@@ -339,7 +342,7 @@ const AddTransactionForm = ({
             e.preventDefault();
             formik.handleSubmit();
           }}
-          className="w-full"
+          className="w-full cursor-pointer"
           disabled={transactionLoading}
         >
           {transactionLoading ? (
