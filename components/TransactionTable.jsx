@@ -60,6 +60,8 @@ const TransactionTable = ({ transactions }) => {
   const [recurringFilter, setRecurringFilter] = useState("");
   const [open,setOpen] = useState(false);
   const [transactionToDelete, setTransactionToDelete] = useState(null);
+  const [multitransactionDelete, setMultiTransactionDelete] = useState(false);
+  
 
   const [sortConfig, setSortConfig] = useState({
     field: "date",
@@ -146,17 +148,6 @@ const TransactionTable = ({ transactions }) => {
     error: deleteError
   } = UseFetch(bulkDeleteTransactions);
 
-  const handleBulkDelete = async () => {
-    if (
-      !window.confirm(
-        `Are you sure you want to delete ${selectedIds.length} transactions?`
-      )
-    )
-      return;
-
-    deleteFn(selectedIds);
-  };
-
   useEffect(() => {
     if (deleted && !deleteLoading) {
       console.log("deleted", deleted);
@@ -240,9 +231,10 @@ const TransactionTable = ({ transactions }) => {
           {selectedIds.length > 0 && (
             <div className="flex items-center gap-2">
 
-              <Button variant={"destructive"} className={"cursor-pointer"} size={"sm"} 
-              onClick={handleBulkDelete}>
-                <Trash className="h-4 w-4 mr-2"/>
+              <Button variant={"destructive"} className={"cursor-pointer dark:bg-red-600"} size={"sm"} 
+              // onClick={handleBulkDelete}
+              onClick={() => setMultiTransactionDelete(true)}>
+                <Trash className="h-4 w-4 mr-2 "/>
                 Delete Selected ({selectedIds.length})
               </Button>
             </div>
@@ -421,7 +413,7 @@ const TransactionTable = ({ transactions }) => {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          className="text-destructive cursor-pointer"
+                          className="text-destructive cursor-pointer dark:bg-red-600 dark:text-white hover:text-red-600"
                             // onClick={() => deleteFn([transaction.id])}
                             onClick={() => handleDelete(transaction)}
                         >
@@ -437,6 +429,7 @@ const TransactionTable = ({ transactions }) => {
         </Table>
       </div>
       <DeleteDialog open={open} setOpen={setOpen} transaction={transactionToDelete} deleteFn={deleteFn}/>
+      <DeleteDialog open={multitransactionDelete} setOpen={setMultiTransactionDelete} transaction={transactionToDelete} deleteFn={deleteFn} selectedIds={selectedIds} isBulkDelete={true}/>
     </div>
 
     

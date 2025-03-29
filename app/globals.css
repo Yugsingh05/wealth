@@ -171,3 +171,7 @@
   background-size: 200% 200%;
   animation: gradientMove 3s ease infinite;
 }
+
+.image-remove-bg {
+  mix-blend-mode: multiply; /* Works best on dark backgrounds */
+}

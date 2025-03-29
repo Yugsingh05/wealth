@@ -73,9 +73,8 @@ export async function CreateTransaction(data) {
         data: {
           ...data,
           userId: user.id,
-          nextTransactionDate:
-            data.isRecurring && data.recurringInterval
-              ? calculateNextRecurringDate(data.date, data.recurringInterval)
+          nextTransactionDate: data.isRecurring && data.recurringInterval
+              ? await calculateNextRecurringDate(data.date, data.recurringInterval)
               : null,
         }
       })
@@ -248,7 +247,7 @@ export async function getUserTransactions(query = {}) {
       date.setFullYear(date.getFullYear() + 1);
       break;
   }
-
+console.log("date " , date)
   return date;
 }
 

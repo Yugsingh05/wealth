@@ -204,7 +204,7 @@ const AddTransactionForm = ({
                 <Button
                   type="button"
                   variant="ghost"
-                  className="relative  cursor-pointer flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
+                  className="relative dark:bg-slate-900/50 cursor-pointer flex w-full c select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
                 >
                   Create Account
                 </Button>
