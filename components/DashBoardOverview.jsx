@@ -80,15 +80,15 @@ const DashBoardOverview = ({accounts,transactions}) => {
         );
       });
 
-      const expensesByCategory = currentMonthExpenses.reduce((acc,transaction) => {
+      const expensesByCategory = currentMonthExpenses.reduce((acc, transaction) => {
         const category = transaction.category;
         if(!acc[category]){
             acc[category] = 0;
         }
-
+      
         acc[category] += transaction.amount;
         return acc;
-      })
+      }, {}); // Add an empty object as the initial value
 
       const pieChartData = Object.entries(expensesByCategory).map(([category,amount]) => ({
         name : category,

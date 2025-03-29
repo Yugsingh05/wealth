@@ -162,3 +162,25 @@ export async function bulkDeleteTransactions(transactionIds) {
       return { success: false, error: error.message };
     }
   }
+
+  export async function DeleteAccount(accountId) {
+    try {
+
+      const account = await db.account.findUnique({
+        where: { id: accountId },
+      });
+  
+      if (!account) throw new Error("Account not found");
+  
+      await db.account.delete({
+        where: { id: accountId },
+      });
+  
+      revalidatePath("/dashboard");
+  
+      return { success: true };
+      
+    } catch (error) {
+      
+    }
+  }

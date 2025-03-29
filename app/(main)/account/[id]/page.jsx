@@ -1,29 +1,89 @@
-import { GetAccountWithTransactions } from "@/actions/accounts";
+"use client";
+
+import { DeleteAccount, GetAccountWithTransactions } from "@/actions/accounts";
 import AccountChart from "@/components/AccountChart";
+import AccountDeleteDialog from "@/components/AccountDeleteDialog";
 import TransactionTable from "@/components/TransactionTable";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Trash } from "lucide-react";
-import { notFound } from "next/navigation";
-import React, { Suspense } from "react";
+import { LoaderCircle } from "lucide-react";
+import { notFound, useSearchParams } from "next/navigation";
+import React, { Suspense, useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
+import { toast } from "sonner";
 
-const Account = async ({ params }) => {
-  const { id } = await params;
-  // const [open, setOpen] = useState(false);
-  // const [transactionToDelete, setTransactionToDelete] = useState(null);
-  // const [deletefn, setDeleteFn] = useState(null);
+const Account = ({ params }) => {
+  const [accountData, setAccountData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [deleteAcccountLoading, setDeleteAcccountLoading] = useState(false);
+  const { id } = params;
+  const searchParams = useSearchParams();
+  const isDefault = searchParams.get("default") === "true";
 
-  const accountData = await GetAccountWithTransactions(id);
+  console.log("isDefault", isDefault);
+
+  console.log("id", id);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await GetAccountWithTransactions(id);
+        if (!data) {
+          notFound();
+        }
+        setAccountData(data);
+      } catch (error) {
+        console.error("Error fetching account data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  const handleDeleteAccount = async () => {
+    setDeleteAcccountLoading(true);
+    try {
+      console.log("deleting account id", id);
+     const res =  await DeleteAccount(id);
+      // Navigate to accounts list or home page after deletion
+      console.log("res", res);
+      if(res.success){
+        setDeleteAcccountLoading(false);
+        toast.success("Account deleted successfully",{
+          position:"top-right"
+        });
+        window.location.href = "/dashboard";
+      }
+    
+    } catch (error) {
+      setDeleteAcccountLoading(false);
+      toast.error(error.message,{
+        position:"top-right"
+      });
+      console.error("Error deleting account:", error);
+    }
+  };
+
+  if (loading) {
+    return <BarLoader className="mt-4" width={"100%"} color="#9333ea" />;
+  }
 
   if (!accountData) {
-    notFound();
+    return <div>Account not found</div>;
   }
 
   const { transactions, ...account } = accountData;
 
+  // if(true){
+  //   return 
+  // }
+
   return (
     <div className="space-y-8 px-5">
+
+      {deleteAcccountLoading ? <LoaderCircle className=" h-10 my-auto mx-auto animate-spin" width={"100%"} color="#9333ea" /> : 
+
+      <>
       <div className="flex gap-4 items-end justify-between">
         <div>
           <h1 className="text-5xl sm:text-6xl font-bold tracking-tight gradient-title capitalize">
@@ -40,40 +100,7 @@ const Account = async ({ params }) => {
             <div className="text-xl sm:text-2xl font-bold">
               ₹{parseFloat(account.balance).toFixed(2)}
             </div>
-            {/* <Button  className={"bg-red-600 hover:bg-red-500 hover:cursor-pointer"}>
-            <Trash className="text-white h-8 w-8"/>
-            </Button> */}
-
-<Dialog>
-  <DialogTrigger asChild>
-    <Button className="bg-red-600 hover:bg-red-500 hover:cursor-pointer p-2 rounded">
-      <Trash className="text-white h-5 w-5" />
-    </Button>
-  </DialogTrigger>
-
-  <DialogContent className="flex flex-col items-center gap-4">
-    <DialogTitle>Are you sure?</DialogTitle>
-    <p className="text-sm text-muted-foreground">
-      You want to delete this account?
-    </p>
-
-    {/* Buttons for cancel and confirm actions */}
-    <div className="flex justify-between mt-4 w-full px-4">
-      {/* Cancel Button (Closes the Dialog) */}
-      <DialogTrigger asChild>
-        <Button variant="outline" className="px-4 py-2 hover:cursor-pointer" >
-          Cancel
-        </Button>
-      </DialogTrigger>
-
-      {/* Confirm Button (Trigger the delete action) */}
-      <Button className="bg-red-600 hover:bg-red-500 px-4 py-2 text-white hover:cursor-pointer">
-        Confirm
-      </Button>
-    </div>
-  </DialogContent>
-</Dialog>
-
+            <AccountDeleteDialog handleDeleteAccount={handleDeleteAccount} isDefault={isDefault} />
           </div>
           <p className="text-sm text-muted-foreground">
             {account._count.transactions} Transactions
@@ -92,9 +119,9 @@ const Account = async ({ params }) => {
       >
         <TransactionTable transactions={transactions} />
       </Suspense>
+      </>
 
-     
-
+  }
     </div>
   );
 };
