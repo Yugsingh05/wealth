@@ -3,7 +3,7 @@
 import { transactionSchema } from "@/app/lib/schema";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -109,11 +109,20 @@ const AddTransactionForm = ({
       }
     },
   });
-
-  const filteredCategories = categories.filter(
-    (category) => category.type === formik.values.type
+  const filteredCategories = useMemo(
+    () => categories.filter((category) => category.type === formik.values.type),
+    [categories, formik.values.type]
   );
-
+  
+  useEffect(() => {
+    if (
+      filteredCategories.length &&
+      formik.values.category !== filteredCategories[0]?.id
+    ) {
+      formik.setFieldValue("category", filteredCategories[0]?.id);
+    }
+  }, [filteredCategories]);
+  
   const handleScanComplete = (scannedData) => {
     if (scannedData) {
       console.log("scannedData", scannedData);
@@ -129,7 +138,7 @@ const AddTransactionForm = ({
     }
   };
   return (
-    <form className="space-y-6">
+    <form className="space-y-6" onSubmit={(e) => {e.preventDefault();}}>
       {/* {!editMode && <ReceiptScanner onScanComplete={handleScanComplete} />} */}
      { !editMode && <ReceiptScanner onScanComplete={handleScanComplete}/>}
 
@@ -139,7 +148,8 @@ const AddTransactionForm = ({
       <div className="space-y-2">
         <label className="text-sm font-medium">Type</label>
         <Select
-        
+        id="type"
+        name="type"
           onValueChange={(value) => formik.setFieldValue("type", value)}
           defaultValue={formik.values.type}
         >
@@ -161,15 +171,18 @@ const AddTransactionForm = ({
         <div className="space-y-2">
           <label className="text-sm font-medium">Amount</label>
           <Input
+          id="amount"
+          name="amount"
             type="number"
             step="0.01"
             className="cursor-pointer"
             placeholder="0.00"
-            {...formik.getFieldProps("amount")}
+            value={formik.values.amount}
+            onChange={formik.handleChange}
           />
-          {formik.errors.amount && (
+          {(formik.errors.amount && formik.touched.amount )&&
             <p className="text-sm text-red-500">{formik.errors.amount}</p>
-          )}
+          }
         </div>
 
         <div className="space-y-2">
@@ -184,7 +197,7 @@ const AddTransactionForm = ({
             <SelectContent>
               {accounts.data.map((account) => (
                 <SelectItem key={account.id} value={account.id} className={"cursor-pointer"}>
-                  {account.name} (${parseFloat(account.balance).toFixed(2)})
+                  {account.name} (₹{parseFloat(account.balance).toFixed(2)})
                 </SelectItem>
               ))}
               <CreateAccountDrawer>
@@ -198,9 +211,9 @@ const AddTransactionForm = ({
               </CreateAccountDrawer>
             </SelectContent>
           </Select>
-          {formik.errors.accountId && (
+          {(formik.errors.accountId && formik.touched.accountId )&&
             <p className="text-sm text-red-500">{formik.errors.accountId}</p>
-          )}
+          }
         </div>
       </div>
 
@@ -210,7 +223,7 @@ const AddTransactionForm = ({
         <Select
         value={formik.values.category}
           onValueChange={(value) => formik.setFieldValue("category", value)}
-          defaultValue={formik.values.category}
+          
         >
           <SelectTrigger className={"w-full cursor-pointer"}>
             <SelectValue placeholder="Select category" />
@@ -223,9 +236,9 @@ const AddTransactionForm = ({
             ))}
           </SelectContent>
         </Select>
-        {formik.errors.category && (
-          <p className="text-sm text-red-500">{formik.errors.category}</p>
-        )}
+        {(formik.errors.category && formik.touched.category )&&
+            <p className="text-sm text-red-500">{formik.errors.category}</p>
+          }
       </div>
 
       {/* Date */}
@@ -261,9 +274,9 @@ const AddTransactionForm = ({
             />
           </PopoverContent>
         </Popover>
-        {formik.errors.date && (
-          <p className="text-sm text-red-500">{formik.errors.date}</p>
-        )}
+        {(formik.errors.date && formik.touched.date )&&
+            <p className="text-sm text-red-500">{formik.errors.date}</p>
+          }
       </div>
 
       {/* Description */}
@@ -274,11 +287,12 @@ const AddTransactionForm = ({
           id="description"
           name="description"
           className={"cursor-pointer"}
-          {...formik.getFieldProps("description")}
+         value={formik.values.description}
+          onChange={formik.handleChange}
         />
-        {formik.errors.description && (
-          <p className="text-sm text-red-500">{formik.errors.description}</p>
-        )}
+        {(formik.errors.description && formik.touched.description )&&
+            <p className="text-sm text-red-500">{formik.errors.description}</p>
+          }
       </div>
 
       {/* Recurring Toggle */}
@@ -319,11 +333,9 @@ const AddTransactionForm = ({
               <SelectItem value="YEARLY" className={"cursor-pointer"}>Yearly</SelectItem>
             </SelectContent>
           </Select>
-          {formik.errors.recurringInterval && (
-            <p className="text-sm text-red-500">
-              {formik.errors.recurringInterval}
-            </p>
-          )}
+          {(formik.errors.recurringInterval && formik.touched.recurringInterval )&&
+            <p className="text-sm text-red-500">{formik.errors.recurringInterval}</p>
+          }
         </div>
       )}
 
@@ -338,10 +350,7 @@ const AddTransactionForm = ({
         </Button>
         <Button
           type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            formik.handleSubmit();
-          }}
+          onClick={formik.handleSubmit}
           className="w-full cursor-pointer"
           disabled={transactionLoading}
         >

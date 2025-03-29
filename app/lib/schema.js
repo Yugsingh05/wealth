@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 export const transactionSchema = yup.object().shape({
   type: yup.string().oneOf(["INCOME", "EXPENSE"]).required("Type is required"),
-  amount: yup.string().min(1, "Amount is required").required("Amount is required"),
+  amount: yup.string().required("Amount is required"),
   description: yup.string().optional(),
   date: yup.date().required("Date is required"),
   accountId: yup.string().min(1, "Account is required").required("Account is required"),
