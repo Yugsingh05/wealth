@@ -24,12 +24,12 @@ const Testimonials = () => {
                     />
                     <div className="ml-4">
                       <div className="font-semibold">{testimonial.name}</div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-gray-600 dark:text-gray-300">
                         {testimonial.role}
                       </div>
                     </div>
                   </div>
-                  <p className="text-gray-600">{testimonial.quote}</p>
+                  <p className="text-gray-600 dark:text-gray-200/90">{testimonial.quote}</p>
                 </CardContent>
               </Card>
             ))}

@@ -14,7 +14,7 @@ const FeaturesData = () => {
                         <CardContent className={"space-y-4 pt-4"}>
                             {feature.icon}
                         <h3 className='text-xl font-semibold'>{feature.title}</h3>
-                        <p className='text-gray-600'>{feature.description}</p>
+                        <p className='text-gray-600 dark:text-slate-300'>{feature.description}</p>
                         </CardContent>
                     </Card>
                 ))}
