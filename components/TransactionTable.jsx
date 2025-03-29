@@ -260,7 +260,7 @@ const TransactionTable = ({ transactions }) => {
 
 
 
-      <div className="rounded-md border">
+      <div className="rounded-md border max-h-[650px] overflow-y-scroll " >
         <Table>
           <TableHeader>
             <TableRow>
@@ -332,6 +332,7 @@ const TransactionTable = ({ transactions }) => {
                 </TableCell>
               </TableRow>
             ) : (
+              
               filterdAndSortedTransactions.map((transaction) => (
                 <TableRow key={transaction.id}>
                   <TableCell>
