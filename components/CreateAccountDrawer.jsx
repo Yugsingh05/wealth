@@ -25,9 +25,11 @@ import UseFetch from "@/hooks/use-fetcch";
 import { CreateAccount } from "@/actions/dashboard";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { set } from "date-fns";
 
-const CreateAccountDrawer = ({ children }) => {
+const CreateAccountDrawer = ({ children ,setAccounts}) => {
   
+  const [createAccountLoading, setCreateAccountLoading] = useState(false);
   const validationSchema = Yup.object({
     name: Yup.string().min(1, "Name is required").required("Name is required"),
     type: Yup.string().required("Account type is required"),
@@ -39,26 +41,25 @@ const CreateAccountDrawer = ({ children }) => {
 
   const [open, setOpen] = useState(false);
 
-  const {
-    data: NewAccount,
-    error,
-    fn: createAccountFn,
-    loading: createAccountLoading,
-  } = UseFetch(CreateAccount);
+  // const {
+  //   data: NewAccount,
+  //   error,
+  //   fn: createAccountFn,
+  // } = UseFetch(CreateAccount);
 
-  useEffect(() => {
-    if (NewAccount && !createAccountLoading) {
-      toast.success("Account created successfully");
-      formik.resetForm();
-      setOpen(false);
-    }
-  }, [NewAccount, createAccountLoading]);
+  // useEffect(() => {
+  //   if (NewAccount && !createAccountLoading) {
+  //     toast.success("Account created successfully");
+  //     formik.resetForm();
+  //     setOpen(false);
+  //   }
+  // }, [NewAccount, createAccountLoading]);
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error.message || "Failed to create account");
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     toast.error(error.message || "Failed to create account");
+  //   }
+  // }, [error]);
 
   const formik = useFormik({
     initialValues: {
@@ -70,10 +71,37 @@ const CreateAccountDrawer = ({ children }) => {
     validationSchema, // ✅ Corrected this
 
     onSubmit: async (values) => {
+      setCreateAccountLoading(true);
       console.log("values", values);
 
-      const res = await createAccountFn(values);
-      console.log("res", res);
+     try {
+       const res = await CreateAccount(values);
+       console.log("res", res);
+
+       if(res.success){
+        toast.success("Account created successfully");
+        formik.resetForm();
+
+        setAccounts((prevAccounts) => {
+          if (res.data.isDefault) {
+            return prevAccounts.map((account) => ({
+              ...account,
+              isDefault: false,
+            })).concat(res.data);
+          }
+          return [...prevAccounts, res.data];
+        });
+        
+        setOpen(false);
+        setCreateAccountLoading(false);
+       }
+     } catch (error) {
+
+      console.error("error", error);
+      toast.error(error.message || "Failed to create account");
+      setCreateAccountLoading(false);
+      
+     }
     },
   });
 
