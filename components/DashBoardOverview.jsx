@@ -3,58 +3,62 @@
 import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
 
 
-const COLORS = [
-    "#FF5733", // Vibrant Orange
-    "#36A2EB", // Bright Blue
-    "#4CAF50", // Fresh Green
-    "#FFC107", // Warm Yellow
-    "#9C27B0", // Rich Purple
-    "#FF9800", // Soft Orange
-    "#03A9F4", // Sky Blue
-  ];
+// const COLORS = [
+//     "#FF5733", // Vibrant Orange
+//     "#36A2EB", // Bright Blue
+//     "#4CAF50", // Fresh Green
+//     "#FFC107", // Warm Yellow
+//     "#9C27B0", // Rich Purple
+//     "#FF9800", // Soft Orange
+//     "#03A9F4", // Sky Blue
+//   ];
 
-  export  function PieChartComponent({ pieChartData }) {
+  import { Pie } from 'react-chartjs-2';
+  import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+  
+  ChartJS.register(ArcElement, Tooltip, Legend);
+  
+  export function PieChartComponent({ pieChartData }) {
+    const data = {
+      labels: pieChartData.map((item) => item.name),
+      datasets: [
+        {
+          data: pieChartData.map((item) => item.value),
+          backgroundColor: [
+            '#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#ff0000', '#00c49f'
+          ],
+          hoverOffset: 4,
+        },
+      ],
+    };
+  
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+        },
+        tooltip: {
+          callbacks: {
+            label: (tooltipItem) => {
+              return `${tooltipItem.label}: ₹${tooltipItem.raw}`;
+            },
+          },
+        },
+      },
+    };
+  
     return (
-       <div className="w-full h-[450px] bg-white rounded-2xl shadow-lg p-4">
-     <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieChartData}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                    label={({ name, value }) => `${name}: ₹${value}`}
-                  >
-                    {pieChartData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    formatter={(value) => `₹${value}`}
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--popover))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "var(--radius)",
-                    }}
-                  />
-                  <Legend/>
-                </PieChart>
-              </ResponsiveContainer>
-    </div>
+      <div className="w-full h-[400px] bg-white rounded-2xl shadow-lg p-4">
+        <Pie data={data} options={options}  className='mx-auto'/>
+      </div>
     );
   }
-
 
 const DashBoardOverview = ({accounts,transactions}) => {
 
@@ -177,7 +181,7 @@ const DashBoardOverview = ({accounts,transactions}) => {
               No expenses this month
             </p>
           ) : (
-            <div className="h-[300px] overflow-auto" style={{
+            <div className="h-[300px] overflow-auto " style={{
                 scrollbarWidth:"none"
             }}>
              <PieChartComponent pieChartData={pieChartData} />
