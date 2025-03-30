@@ -22,12 +22,6 @@ const DashBoardPage = () => {
     const fetchData = async () => {
       const fetchedAccounts = await GetUserAccounts();
       setAccounts(fetchedAccounts?.data || []);
-      
-      const defaultAccount = fetchedAccounts?.data?.find((account) => account.isDefault);
-      if (defaultAccount) {
-        const fetchedBudget = await getCurrentBudget(defaultAccount.id);
-        setBudgetData(fetchedBudget);
-      }
 
       const fetchedTransactions = await getDashboardData();
       setTransactions(fetchedTransactions || []);
@@ -37,6 +31,22 @@ const DashBoardPage = () => {
 
     fetchData();
   }, []);
+
+  console.log("transactions", transactions);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const defaultAccount = accounts.find((account) => account.isDefault);
+      if (defaultAccount) {
+        const fetchedBudget = await getCurrentBudget(defaultAccount.id);
+        setBudgetData(fetchedBudget);
+      }
+    };
+
+    fetchData();
+  },[accounts]);
+
+
 
 
   if(loading)  return (
@@ -48,9 +58,6 @@ const DashBoardPage = () => {
       <p className="mt-4 text-lg font-semibold">Loading Dashboard...</p>
     </div>
   );
-
-  console.log("accounts", accounts);
-
 
   return (
     <div className="space-y-8" >
@@ -74,7 +81,7 @@ const DashBoardPage = () => {
         </CreateAccountDrawer>
 
         {accounts?.length > 0 && accounts.map((account)  => (
-          <AccountCard key={account.id} account={account} />
+          <AccountCard key={account.id} account={account} setAccounts={setAccounts} />
         ))}
       </div>
     </div>

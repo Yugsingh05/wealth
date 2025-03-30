@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogTitle } from './ui/dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 
 
-const AccountCard = ({account}) => {
+const AccountCard = ({account,setAccounts}) => {
 
     const {name,type,balance , id , isDefault} = account;
 
@@ -36,6 +36,14 @@ const AccountCard = ({account}) => {
             if (updatedAccount?.success) {
               toast.success("Default account updated successfully",{
                 position:"top-right"
+              });
+              setAccounts((prevAccounts) => {
+                return prevAccounts.map((account) => {
+                  if (account.id === id) {
+                    return { ...account, isDefault: true };
+                  }
+                  return { ...account, isDefault: false };
+                });
               });
             }
           }, [updatedAccount]);

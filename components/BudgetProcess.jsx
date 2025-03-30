@@ -1,8 +1,7 @@
 "use client";
 
 import { updateBudget } from "@/actions/budget";
-import UseFetch from "@/hooks/use-fetcch";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { toast } from "sonner";
 import {
   Card,
@@ -22,13 +21,6 @@ const BudgetProcess = ({ initialBudget, currentExpenses }) => {
     initialBudget?.amount?.toString() || ""
   );
   const [isLoading, setIsLoading] = useState(false);
-
-  // const {
-  //     loading: isLoading,
-  //     fn: updateBudgetFn,
-  //     data: updatedBudget,
-  //     error,
-  //   } = UseFetch(updateBudget);
 
   const percentUsed = initialBudget
     ? (currentExpenses / initialBudget.amount) * 100
