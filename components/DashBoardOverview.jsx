@@ -64,7 +64,7 @@ const DashBoardOverview = ({accounts,transactions}) => {
 
     console.log("accounts",accounts);
     const [selectedAccountId, setSelectedAccountId] = useState(
-        accounts.data.find((a) => a.isDefault)?.id || accounts.data[0]?.id
+        accounts.find((a) => a.isDefault)?.id || accounts.data[0]?.id
       );
     
 
@@ -116,7 +116,7 @@ const DashBoardOverview = ({accounts,transactions}) => {
               <SelectValue placeholder="Select account" />
             </SelectTrigger>
             <SelectContent>
-              {accounts.data.map((account) => (
+              {accounts.map((account) => (
                 <SelectItem key={account.id} value={account.id} className={"cursor-pointer"}>
                   {account.name}
                 </SelectItem>

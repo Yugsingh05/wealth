@@ -5,7 +5,7 @@ import AccountChart from "@/components/AccountChart";
 import AccountDeleteDialog from "@/components/AccountDeleteDialog";
 import TransactionTable from "@/components/TransactionTable";
 import { LoaderCircle } from "lucide-react";
-import { notFound, useSearchParams } from "next/navigation";
+import { notFound } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { toast } from "sonner";
@@ -15,8 +15,6 @@ const Account =  ({ params }) => {
   const [loading, setLoading] = useState(true);
   const [deleteAcccountLoading, setDeleteAcccountLoading] = useState(false);
   const { id } = React.use(params);
-  // const searchParams = useSearchParams();
-  // const isDefault = searchParams.get("default") === "true";
 
   console.log("isDefault", accountData?.isDefault);
 

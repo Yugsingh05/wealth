@@ -1,4 +1,4 @@
-"use server"
+"use client";
 
 import { getCurrentBudget } from "@/actions/budget";
 import { getDashboardData, GetUserAccounts } from "@/actions/dashboard";
@@ -7,20 +7,47 @@ import BudgetProcess from "@/components/BudgetProcess";
 import CreateAccountDrawer from "@/components/CreateAccountDrawer";
 import DashBoardOverview from "@/components/DashBoardOverview";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus } from "lucide-react";
-import React from "react";
+import { Loader2Icon, LoaderIcon, Plus } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
-const DashBoardPage = async() => {
+const DashBoardPage = () => {
 
-  const accounts = await GetUserAccounts();
-     const defaultAccount = accounts.data.find((account) => account.isDefault);
+  const [accounts, setAccounts] = useState([]);
+  const [budgetData, setBudgetData] = useState(null);
+  const [transactions, setTransactions] = useState([]);
 
-  let budgetData = null;
-  if(defaultAccount){
-    budgetData = await getCurrentBudget(defaultAccount.id)
-  }
+  const [loading,setLoading] = useState(true);
 
-  const transactions = await getDashboardData()
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedAccounts = await GetUserAccounts();
+      setAccounts(fetchedAccounts?.data || []);
+      
+      const defaultAccount = fetchedAccounts?.data?.find((account) => account.isDefault);
+      if (defaultAccount) {
+        const fetchedBudget = await getCurrentBudget(defaultAccount.id);
+        setBudgetData(fetchedBudget);
+      }
+
+      const fetchedTransactions = await getDashboardData();
+      setTransactions(fetchedTransactions || []);
+
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if(loading)  return (
+    <div className="flex flex-col items-center justify-center h-[420px] w-full bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 mx-auto mt-[10%] rounded-3xl md:w-1/2">
+      <div className="relative w-16 h-16">
+        <div className="absolute inset-0 border-4 border-gray-300 dark:border-gray-700 rounded-full animate-ping"></div>
+        <Loader2Icon className="w-16 h-16 text-blue-600 dark:text-blue-400 animate-spin" />
+      </div>
+      <p className="mt-4 text-lg font-semibold">Loading Dashboard...</p>
+    </div>
+  );
+
 
   return (
     <div className="space-y-8" >
@@ -43,7 +70,7 @@ const DashBoardPage = async() => {
           </Card>
         </CreateAccountDrawer>
 
-        {accounts?.data?.length > 0 && accounts.data.map((account)  => (
+        {accounts?.length > 0 && accounts.map((account)  => (
           <AccountCard key={account.id} account={account} />
         ))}
       </div>
