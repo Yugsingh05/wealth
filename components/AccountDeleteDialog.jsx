@@ -30,15 +30,16 @@ const AccountDeleteDialog = ({ handleDeleteAccount ,isDefault = false }) => {
           </Button>
 
           <Button
-          disabled={isDefault}
-            onClick={() => {
-              handleDeleteAccount();
-              setIsOpen(false);
-            }}
-            className="bg-red-600 text-white hover:cursor-pointer hover:bg-red-500"
-          >
-            Confirm
-          </Button>
+  disabled={isDefault}
+  onClick={() => {
+    handleDeleteAccount();
+    setIsOpen(false);
+  }}
+  className="bg-red-600 text-white hover:bg-red-500 disabled:bg-red-700 disabled:cursor-not-allowed cursor-pointer"
+>
+  Confirm
+</Button>
+
         </div>
       </DialogContent>
     </Dialog>

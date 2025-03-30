@@ -45,7 +45,7 @@ export async function CreateAccount(data) {
             }
         });
 
-        const shouldBeDefault = existingAccounts.lenght === 0 ? true : data.isDefault;
+        const shouldBeDefault = existingAccounts.length === 0 ? true : data.isDefault;
 
         if (shouldBeDefault) {
             await db.account.updateMany({

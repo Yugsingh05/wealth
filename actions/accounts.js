@@ -85,15 +85,19 @@ export async function GetAccountWithTransactions(accountId) {
             },
             _count: {
                 select: { transactions: true }
-            }
+            },
+           
         }
     });
 
     if (!account) return null;
 
+    console.log("account", account.isDefault);
+
     return {
         ...serializeDecimal(account),
-        transactions: account.transactions.map((transaction) => serializeDecimal(transaction))
+        transactions: account.transactions.map((transaction) => serializeDecimal(transaction)),
+        isDefault: account.isDefault
     }
 
 }

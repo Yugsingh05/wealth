@@ -10,17 +10,15 @@ import React, { Suspense, useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { toast } from "sonner";
 
-const Account = ({ params }) => {
+const Account =  ({ params }) => {
   const [accountData, setAccountData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteAcccountLoading, setDeleteAcccountLoading] = useState(false);
-  const { id } = params;
-  const searchParams = useSearchParams();
-  const isDefault = searchParams.get("default") === "true";
+  const { id } = React.use(params);
+  // const searchParams = useSearchParams();
+  // const isDefault = searchParams.get("default") === "true";
 
-  console.log("isDefault", isDefault);
-
-  console.log("id", id);
+  console.log("isDefault", accountData?.isDefault);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +27,7 @@ const Account = ({ params }) => {
         if (!data) {
           notFound();
         }
+        console.log("data", data);
         setAccountData(data);
       } catch (error) {
         console.error("Error fetching account data:", error);
@@ -100,7 +99,7 @@ const Account = ({ params }) => {
             <div className="text-xl sm:text-2xl font-bold">
               ₹{parseFloat(account.balance).toFixed(2)}
             </div>
-            <AccountDeleteDialog handleDeleteAccount={handleDeleteAccount} isDefault={isDefault} />
+            <AccountDeleteDialog handleDeleteAccount={handleDeleteAccount} isDefault={accountData?.isDefault} />
           </div>
           <p className="text-sm text-muted-foreground">
             {account._count.transactions} Transactions
