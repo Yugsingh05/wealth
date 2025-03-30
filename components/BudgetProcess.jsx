@@ -39,7 +39,6 @@ const BudgetProcess = ({ initialBudget, currentExpenses }) => {
     try {
       const res = await updateBudget(amount);
       toast.success("Budget updated successfully");
-      console.log("res", res);
     } catch (error) {
       toast.error(error.message || "Failed to update budget");
     } finally {
@@ -52,21 +51,7 @@ const BudgetProcess = ({ initialBudget, currentExpenses }) => {
     setNewBudget(initialBudget?.amount?.toString() || "");
     setIsEditing(false);
   };
-
-  // useEffect(() => {
-  //   console.log("updatedBudget",updatedBudget);
-  //   if(updateBudget?.success){
-  //       setIsEditing(false);
-  //       toast.success("Budget updated successfully");
-  //   }
-  // },[updateBudget]);
-
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.error(error.message || "Failed to update budget");
-  //   }
-  // }, [error]);
-
+  
   return (
     <Card>
       <CardHeader

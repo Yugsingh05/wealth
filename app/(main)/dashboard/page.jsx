@@ -32,8 +32,6 @@ const DashBoardPage = () => {
     fetchData();
   }, []);
 
-  console.log("transactions", transactions);
-
   useEffect(() => {
     const fetchData = async () => {
       const defaultAccount = accounts.find((account) => account.isDefault);

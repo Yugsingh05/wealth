@@ -20,7 +20,6 @@ const ReceiptScanner = ({ onScanComplete }) => {
 
     try {
     const res = await ScanReceipt(file);
-    console.log("res", res);
 
     if(res.success){
         onScanComplete(res.data);

@@ -61,9 +61,7 @@ import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
   }
 
   const DashBoardOverview = ({ accounts = [], transactions = [] }) => {
-    console.log("Accounts:", accounts);
-    console.log("Transactions:", transactions);
-  
+      
     // Ensure accounts exist before accessing properties
     const [selectedAccountId, setSelectedAccountId] = useState(
       accounts.length > 0 ? accounts.find((a) => a.isDefault)?.id || accounts[0]?.id : null

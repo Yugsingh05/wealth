@@ -92,8 +92,6 @@ export async function GetAccountWithTransactions(accountId) {
 
     if (!account) return null;
 
-    console.log("account", account.isDefault);
-
     return {
         ...serializeDecimal(account),
         transactions: account.transactions.map((transaction) => serializeDecimal(transaction)),

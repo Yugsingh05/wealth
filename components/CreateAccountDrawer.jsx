@@ -72,11 +72,9 @@ const CreateAccountDrawer = ({ children ,setAccounts}) => {
 
     onSubmit: async (values) => {
       setCreateAccountLoading(true);
-      console.log("values", values);
 
      try {
        const res = await CreateAccount(values);
-       console.log("res", res);
 
        if(res.success){
         toast.success("Account created successfully");

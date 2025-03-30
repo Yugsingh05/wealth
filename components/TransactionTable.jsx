@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "./ui/table";
 import { Checkbox } from "./ui/checkbox";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { categoryColors } from "@/data/categories";
 import { Badge } from "./ui/badge";
 import {
@@ -52,7 +52,8 @@ const RECURRING_OPTIONS = {
   YEARLY: "Yearly",
 };
 
-const TransactionTable = ({ transactions }) => {
+const TransactionTable = ({ transactions , setAccountData}) => {
+  // console.log("transactions", transactions);
 
   const [selectedIds, setSelectedIds] = useState([]);
   const [searchTerm,setSearchTerm] = useState("");
@@ -150,13 +151,16 @@ const TransactionTable = ({ transactions }) => {
 
   useEffect(() => {
     if (deleted && !deleteLoading) {
-      console.log("deleted", deleted);
      
       if(deleted.success ) {
+        console.log("deleted",transactionToDelete.amount);
         setSelectedIds([]);
         toast.success("Transactions deleted successfully",{
           position:"top-right"
         })
+        setAccountData((current) => ({ ...current,
+          balance: current.balance + (transactionToDelete.type === "INCOME" ? -transactionToDelete.amount : +transactionToDelete.amount)
+           ,transactions: current.transactions.filter((transaction) => transaction.id !== transactionToDelete.id) }));
       }
       else {
         toast.error("Error deleting transactions",{
@@ -179,11 +183,6 @@ const TransactionTable = ({ transactions }) => {
     setOpen(true);
 
   }
-
-  useEffect(() => {
-    console.log(selectedIds)
-  }, [selectedIds])
-
 
   return (
     <>
@@ -428,7 +427,7 @@ const TransactionTable = ({ transactions }) => {
           </TableBody>
         </Table>
       </div>
-      <DeleteDialog open={open} setOpen={setOpen} transaction={transactionToDelete} deleteFn={deleteFn}/>
+      <DeleteDialog open={open} setOpen={setOpen} transaction={transactionToDelete} deleteFn={deleteFn} loading={deleteLoading} />
       <DeleteDialog open={multitransactionDelete} setOpen={setMultiTransactionDelete} transaction={transactionToDelete} deleteFn={deleteFn} selectedIds={selectedIds} isBulkDelete={true}/>
     </div>
 

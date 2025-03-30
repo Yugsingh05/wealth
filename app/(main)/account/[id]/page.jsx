@@ -16,8 +16,6 @@ const Account =  ({ params }) => {
   const [deleteAcccountLoading, setDeleteAcccountLoading] = useState(false);
   const { id } = React.use(params);
 
-  console.log("isDefault", accountData?.isDefault);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,6 +25,7 @@ const Account =  ({ params }) => {
         }
         console.log("data", data);
         setAccountData(data);
+        setTransaction(data.transactions);
       } catch (error) {
         console.error("Error fetching account data:", error);
       } finally {
@@ -40,10 +39,9 @@ const Account =  ({ params }) => {
   const handleDeleteAccount = async () => {
     setDeleteAcccountLoading(true);
     try {
-      console.log("deleting account id", id);
+  
      const res =  await DeleteAccount(id);
-      // Navigate to accounts list or home page after deletion
-      console.log("res", res);
+     
       if(res.success){
         setDeleteAcccountLoading(false);
         toast.success("Account deleted successfully",{
@@ -70,10 +68,7 @@ const Account =  ({ params }) => {
   }
 
   const { transactions, ...account } = accountData;
-
-  // if(true){
-  //   return 
-  // }
+  // console.log("account", transactions);
 
   return (
     <div className="space-y-8 px-5">
@@ -114,9 +109,10 @@ const Account =  ({ params }) => {
       <Suspense
         fallback={<BarLoader className="mt-4" width={"100%"} color="#9333ea" />}
       >
-        <TransactionTable transactions={transactions} />
+        <TransactionTable transactions={accountData?.transactions} setAccountData={setAccountData}/>
       </Suspense>
       </>
+
 
   }
     </div>

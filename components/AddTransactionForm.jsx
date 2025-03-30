@@ -31,7 +31,6 @@ const AddTransactionForm = ({
   initialData = null,
 }) => {
   const [transactionLoading, setTransactionLoading] = useState(false);
-  console.log("accounts", accounts);
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams?.get("edit");
@@ -61,7 +60,7 @@ const AddTransactionForm = ({
           },
     validationSchema: transactionSchema,
     onSubmit: async (data) => {
-      console.log("data", data);
+     
       setTransactionLoading(true);
       const formData = {
         ...data,
@@ -71,7 +70,7 @@ const AddTransactionForm = ({
       if (editMode) {
         try {
           const res = await updateTransaction(editId, formData);
-          console.log("res", res);
+         
           if (res.success) {
             toast.success(
               editMode
@@ -125,7 +124,7 @@ const AddTransactionForm = ({
   
   const handleScanComplete = (scannedData) => {
     if (scannedData) {
-      console.log("scannedData", scannedData);
+     
       formik.setFieldValue("amount", scannedData.amount.toString());
       formik.setFieldValue("date", new Date(scannedData.date));
       if (scannedData.description) {
