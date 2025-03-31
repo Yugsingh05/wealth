@@ -25,7 +25,6 @@ const Account =  ({ params }) => {
         }
         console.log("data", data);
         setAccountData(data);
-        setTransaction(data.transactions);
       } catch (error) {
         console.error("Error fetching account data:", error);
       } finally {
