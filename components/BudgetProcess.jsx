@@ -27,6 +27,7 @@ const BudgetProcess = ({ initialBudget, currentExpenses ,setProvoke}) => {
     : 0;
 
   const handleUpdateBudget = async () => {
+    setIsLoading(true);
     const amount = parseFloat(newBudget);
 
     if (isNaN(amount) || amount <= 0) {
