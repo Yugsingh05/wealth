@@ -8,7 +8,7 @@ import { ThemeProvider } from "next-themes";
 const inter = Inter({subsets: ['latin']});
 
 export const metadata = {
-  title: "Wealth",
+  title: "FinSpend",
   description: "for managing your finances",
 };
 

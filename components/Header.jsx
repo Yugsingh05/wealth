@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { LayoutDashboard, PenBox } from "lucide-react";
 import { ThemeChanger } from "./ThemeChanger";
 import CheckUser from "@/lib/CheckUser";
+import logo from "../public/finspendlogo.png"
 const Header = async() => {
 
 
@@ -17,13 +18,14 @@ const Header = async() => {
       <nav className="container mx-auto flex items-center justify-between px-4 py-4">
 
         <Link href={"/"}>
-          <Image
-            className="h-12 auto object-contain image-remove-bg"
-            src="/logo.png"
-            alt="logo"
-            width={200}
-            height={60}
-          />
+        <Image
+  className="h-12 w-auto object-contain" 
+  src={logo}
+  alt="logo"
+  height={100} 
+  width={200} 
+/>
+
         </Link>
 
         <div className="flex items-center space-x-2">
