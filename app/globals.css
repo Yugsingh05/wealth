@@ -139,20 +139,59 @@
     @apply bg-gradient-to-br from-blue-600 to-purple-600 font-extrabold tracking-tighter pr-2 pb-2 text-transparent bg-clip-text;
   }
 }
-
-.hero-image-wrapper{
+.hero-image-wrapper {
   perspective: 1000px;
+  overflow: hidden;
 }
 
-.hero-image{
-  transform: rotateX(15deg) scale(1);
-  transition: transform 0.5s ease-out;
-  will-change: transform;
+.hero-image-visible {
+  opacity: 0;
 }
 
-.hero-image.scrolled{
-  transform: rotateX(0deg) scale(1) translateY(40px);
+.hero-image {
+  opacity: 0;
+  transform: rotateX(15deg) scale(0.9) translateY(30px);
+  transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.5s ease-out;
+  will-change: transform, opacity;
 }
+
+.hero-image.scrolled {
+  opacity: 1;
+  transform: rotateX(0deg) scale(1) translateY(0px);
+  margin-top: 18;
+}
+
+/* Extra Glow Effect */
+.hero-image.scrolled::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.hero-image.scrolled:hover::after {
+  opacity: 1;
+}
+
+/* Smooth Background Fade */
+.hero-image-wrapper {
+  animation: fadeInBg 2s ease-in-out forwards;
+}
+
+@keyframes fadeInBg {
+  from {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
 
 @keyframes gradientMove {
   0% {

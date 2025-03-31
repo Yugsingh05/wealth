@@ -50,7 +50,7 @@ const HeroSection = () => {
             <Button variant={"outline"}>Login</Button>
           </Link> */}
         </div>
-        <div className="hero-image-wrapper">
+        <div className="hero-image-wrapper ">
           <div ref={imageRef} className="hero-image">
             <Image
               src={"/banner.jpeg"}
