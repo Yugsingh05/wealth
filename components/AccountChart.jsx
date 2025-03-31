@@ -21,6 +21,7 @@ const DATE_RANGES = {
 };
 
 const AccountChart = ({ transactions }) => {
+  
   const [dateRange, setDateRange] = useState("1M");
 
   const filteredData = useMemo(() => {

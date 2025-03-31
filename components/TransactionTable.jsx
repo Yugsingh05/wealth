@@ -59,7 +59,6 @@ const RECURRING_OPTIONS = {
 };
 
 const TransactionTable = ({ transactions, setAccountData }) => {
-  // console.log("transactions", transactions);
 
   const [selectedIds, setSelectedIds] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -141,41 +140,13 @@ const TransactionTable = ({ transactions, setAccountData }) => {
     }));
   };
 
-  // const {
-  //   loading: deleteLoading,
-  //   fn: deleteFn,
-  //   data: deleted,
-  //   error: deleteError
-  // } = UseFetch(bulkDeleteTransactions);
-
-  // useEffect(() => {
-  //   if (deleted && !deleteLoading) {
-
-  //     if(deleted.success ) {
-  //       console.log("deleted",transactionToDelete.amount);
-  //       setSelectedIds([]);
-  //       toast.success("Transactions deleted successfully",{
-  //         position:"top-right"
-  //       })
-  // setAccountData((current) => ({ ...current,
-  //   balance: current.balance + (transactionToDelete.type === "INCOME" ? -transactionToDelete.amount : +transactionToDelete.amount)
-  //    ,transactions: current.transactions.filter((transaction) => transaction.id !== transactionToDelete.id) }));
-  //     }
-  //     else {
-  //       toast.error("Error deleting transactions",{
-  //         position:"top-left"
-  //       });
-
-  //     }
-  //   }
-  // }, [deleted, deleteLoading]);
-
-
   const handleDeleteTransactions = async () => {
     setDeleteLoading(true);
 
+    const deleteId = selectedIds.length > 0 ? selectedIds : [transactionToDelete.id];
+
     try {
-      const res = await bulkDeleteTransactions(selectedIds);
+      const res = await bulkDeleteTransactions(deleteId);
 
       if (res.success) {
         toast.success("Transactions deleted successfully", {
@@ -198,11 +169,10 @@ const TransactionTable = ({ transactions, setAccountData }) => {
               }, 0),
             transactions: current.transactions.filter((transaction) => !selectedIds.includes(transaction.id)),
           }))
-          console.log("chnage ids , ", cids);
+ 
         } else {
           if(transactionToDelete)  {
-            console.log("chnage ids 1, ", transactionToDelete);
-
+           
             setAccountData((current) => ({
               ...current,
               balance:
@@ -217,7 +187,7 @@ const TransactionTable = ({ transactions, setAccountData }) => {
           }
           else {
             const deleteTran = transactions.find((transaction) => selectedIds.includes(transaction.id));
-            console.log("chnage ids 2, ", deleteTran);
+          
             setAccountData((current) => ({
               ...current,
               balance:
@@ -256,7 +226,6 @@ const TransactionTable = ({ transactions, setAccountData }) => {
     setOpen(true);
   };
 
-  console.log("selectd ids ", selectedIds.length);
   return (
     <>
       <div className="space-y-4">

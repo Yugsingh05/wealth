@@ -23,7 +23,7 @@ const Account =  ({ params }) => {
         if (!data) {
           notFound();
         }
-        console.log("data", data);
+      
         setAccountData(data);
       } catch (error) {
         console.error("Error fetching account data:", error);
@@ -67,7 +67,7 @@ const Account =  ({ params }) => {
   }
 
   const { transactions, ...account } = accountData;
-  // console.log("account", transactions);
+
 
   return (
     <div className="space-y-8 px-5">

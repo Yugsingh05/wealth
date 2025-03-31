@@ -35,6 +35,7 @@ const DashBoardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const defaultAccount = accounts.find((account) => account.isDefault);
+     
       if (defaultAccount) {
         const fetchedBudget = await getCurrentBudget(defaultAccount.id);
         setBudgetData(fetchedBudget);
@@ -43,9 +44,6 @@ const DashBoardPage = () => {
 
     fetchData();
   },[accounts]);
-
-
-
 
   if(loading)  return (
     <div className="flex flex-col items-center justify-center h-[420px] w-full bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 mx-auto mt-[10%] rounded-3xl md:w-1/2">
