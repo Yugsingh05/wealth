@@ -34,6 +34,14 @@ const AddTransactionForm = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams?.get("edit");
+  console.log(
+    "initialData",
+    initialData,
+    "editMode",
+    editMode,
+    "editId",
+    editId
+  );
 
   const formik = useFormik({
     initialValues:
@@ -118,7 +126,7 @@ const AddTransactionForm = ({
       filteredCategories.length &&
       formik.values.category !== filteredCategories[0]?.id
     ) {
-      formik.setFieldValue("category", filteredCategories[0]?.id);
+     if(!editMode) formik.setFieldValue("category", filteredCategories[0]?.id);
     }
   }, [filteredCategories]);
   
