@@ -41,26 +41,6 @@ const CreateAccountDrawer = ({ children ,setAccounts}) => {
 
   const [open, setOpen] = useState(false);
 
-  // const {
-  //   data: NewAccount,
-  //   error,
-  //   fn: createAccountFn,
-  // } = UseFetch(CreateAccount);
-
-  // useEffect(() => {
-  //   if (NewAccount && !createAccountLoading) {
-  //     toast.success("Account created successfully");
-  //     formik.resetForm();
-  //     setOpen(false);
-  //   }
-  // }, [NewAccount, createAccountLoading]);
-
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.error(error.message || "Failed to create account");
-  //   }
-  // }, [error]);
-
   const formik = useFormik({
     initialValues: {
       name: "",

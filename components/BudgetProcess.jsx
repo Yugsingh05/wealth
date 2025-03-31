@@ -15,7 +15,7 @@ import { Button } from "./ui/button";
 import { Check, Pencil, X } from "lucide-react";
 import { Progress } from "./ui/progress";
 
-const BudgetProcess = ({ initialBudget, currentExpenses }) => {
+const BudgetProcess = ({ initialBudget, currentExpenses ,setProvoke}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newBudget, setNewBudget] = useState(
     initialBudget?.amount?.toString() || ""
@@ -38,6 +38,9 @@ const BudgetProcess = ({ initialBudget, currentExpenses }) => {
 
     try {
       const res = await updateBudget(amount);
+      
+     setProvoke((prev) => prev+1)
+      
       toast.success("Budget updated successfully");
     } catch (error) {
       toast.error(error.message || "Failed to update budget");
